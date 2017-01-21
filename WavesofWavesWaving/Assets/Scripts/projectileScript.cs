@@ -27,5 +27,10 @@ public class projectileScript : MonoBehaviour {
 			Destroy (col.gameObject);
 			Destroy (gameObject);
 		}
+        
+        if (col.gameObject.tag == "wall")
+        {
+            Destroy(gameObject);
+        }
 	}
 }

@@ -52,10 +52,7 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector2 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
-		Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
-		lookPos = lookPos - transform.position;
-		float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+	
 
 		if (countToNextHit == 0) 
 		{
@@ -89,27 +86,20 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (Input.GetButtonDown ("Fire1"))
 		{
-			if (shootTime > 10) 
-			{
+            if (shootTime > 10)
+            {
 
-				Vector3 playerPos = gameObject.transform.position;
-				Vector3 playerDirection = gameObject.transform.forward;
-				Quaternion playerRotation = gameObject.transform.rotation;
-				float spawnDistance = 10;
+           
+                Vector2 target = Camera.main.ScreenToWorldPoint(new Vector2(mousePos.x,  mousePos.y));
+                Vector2 myPos = new Vector2(transform.position.x, transform.position.y +1);
+                Vector2 direction = target - myPos;
+                direction.Normalize();
+                Vector3 dir = new Vector3(mousePos.x, mousePos.y, 0);
+                GameObject bullet = Instantiate(projectile[currentType], gameObject.transform.position, Quaternion.Euler(0f, 0f, 0f)) as GameObject;
 
-				Vector3 spawnPos = playerPos + playerDirection*spawnDistance;
-
-				//Instantiate(Resources.Load(projectile[currentType]), spawnPos, playerRotation );
-
-				Debug.Log (lookPos);
-				GameObject bullet = Instantiate (projectile [currentType], gameObject.transform.position, Quaternion.Euler(0f, 0f, 0f)) as GameObject;
-
-				//GameObject bullet = Instantiate (projectile[currentType]), spawnPos, playerRotation)) as GameObject;
-
-
-				Vector3 dir = new Vector3 (mousePos.x, mousePos.y, 0);
-				bullet.GetComponent<Rigidbody> ().AddForce (dir.normalized * projectileSpeed, ForceMode.Impulse);
-			}
+               
+                bullet.GetComponent<Rigidbody>().velocity = direction * projectileSpeed;
+            }
 			shootTime = Time.time + shotInterval;		
 		}
 	}
