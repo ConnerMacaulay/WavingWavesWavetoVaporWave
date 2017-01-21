@@ -8,6 +8,7 @@ public class projectileScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		counter = 0;
+        
 	}
 	
 	// Update is called once per frame
@@ -19,7 +20,7 @@ public class projectileScript : MonoBehaviour {
 		counter++;
 	}
 
-	void OnCollisionEnter (Collision col)
+	void OnTriggerEnter (Collider col)
 	{
 		if (col.gameObject.tag == "enemy1") 
 		{
@@ -27,7 +28,7 @@ public class projectileScript : MonoBehaviour {
 			Destroy (col.gameObject);
 			Destroy (gameObject);
 		}
-        
+
         if (col.gameObject.tag == "wall")
         {
             Destroy(gameObject);
