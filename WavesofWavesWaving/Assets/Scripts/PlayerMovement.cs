@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -22,6 +23,11 @@ public class PlayerMovement : MonoBehaviour {
 
 	public GameObject[] projectile;
 	public int currentType;
+    public GameObject cameraOBJ;
+    public World worldScript;
+
+    public GameObject endOBJ;
+  
 
 	int enemyDamage1 = 1;
 	int countToNextHit;
@@ -29,11 +35,21 @@ public class PlayerMovement : MonoBehaviour {
 	public int projectileSpeed;
 	public int startHpCount;
 
-	public float shootTime;
+	public float shootTime = 1f;
 	public float shotInterval;
+    public RaycastHit hit;
 
-	// Use this for initialization
-	void Start () {
+    public Ray ray;
+
+    // Use this for initialization
+    void Start () {
+
+        cameraOBJ = GameObject.Find("Camera");
+        ray = cameraOBJ.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        
+
+        endOBJ = GameObject.FindGameObjectsWithTag("end");
+       
 
 		playerDestination = transform.position;
 		mask = ~mask;
@@ -52,8 +68,21 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector2 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
-	
-
+	    
+        if(Physics.Raycast(ray, out hit))
+        {
+          
+            if(hit.collider.tag == "end")
+            {
+                Application.LoadLevel(Application.loadedLevel);
+            }
+        }
+        if (health <= 0)
+        {
+         
+            endOBJ.SetActive(true);
+            Time.timeScale = 0;
+        }
 		if (countToNextHit == 0) 
 		{
 			canBeHit = true;
@@ -84,9 +113,10 @@ public class PlayerMovement : MonoBehaviour {
 			transform.position = Vector2.Lerp(transform.position, playerDestination, playerSpeed * Time.deltaTime);
 		}
 
-		if (Input.GetButtonDown ("Fire1"))
+		if (Input.GetButton ("Fire1"))
 		{
-            if (shootTime > 10)
+            shootTime -= Time.deltaTime;
+            if (shootTime <= 0)
             {
 
            
@@ -96,11 +126,10 @@ public class PlayerMovement : MonoBehaviour {
                 direction.Normalize();
                 Vector3 dir = new Vector3(mousePos.x, mousePos.y, 0);
                 GameObject bullet = Instantiate(projectile[currentType], gameObject.transform.position, Quaternion.Euler(0f, 0f, 0f)) as GameObject;
-
-               
                 bullet.GetComponent<Rigidbody>().velocity = direction * projectileSpeed;
+                shootTime = 1f;
             }
-			shootTime = Time.time + shotInterval;		
+				
 		}
 	}
 
@@ -150,8 +179,9 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter (Collision col)
-	{
+    void OnCollisionEnter(Collision col)
+    {
+        print("hit");
 		if (col.gameObject.tag == "wall")
 		{
 			colliding = true;
@@ -159,6 +189,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (col.gameObject.tag == "enemy1")
 		{
+            print("hit");
 			health = health - enemyDamage1;
 			countToNextHit = enemyDamage1 * 10;
 			healthBar [health].SetActive(false);

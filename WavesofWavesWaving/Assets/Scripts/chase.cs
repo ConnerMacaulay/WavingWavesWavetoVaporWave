@@ -20,6 +20,7 @@ public class chase : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        player = GameObject.Find("Player");
 
 	}
 	

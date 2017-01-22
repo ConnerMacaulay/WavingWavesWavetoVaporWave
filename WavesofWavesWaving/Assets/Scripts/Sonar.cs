@@ -26,7 +26,7 @@ public class Sonar : MonoBehaviour {
 
         if (sonar == true)
         {
-            print("a");
+
            
             myCollider.radius = myCollider.radius + 0.2f;
             if (myCollider.radius > 10f)
@@ -41,7 +41,7 @@ public class Sonar : MonoBehaviour {
     {
         if (col.gameObject.tag == "enemy1")
         {
-            print("3");
+
            SpriteRenderer spriteRenderer = col.gameObject.GetComponent<SpriteRenderer>();
             spriteRenderer.enabled = true;
         }

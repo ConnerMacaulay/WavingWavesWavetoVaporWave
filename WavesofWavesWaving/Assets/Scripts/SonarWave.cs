@@ -3,33 +3,12 @@ using System.Collections;
 
 public class SonarWave : MonoBehaviour {
 
-    //   public GameObject player;
+   
        public bool waveOut = false;
     public bool loop = false;
-    //   public bool waveIn = true;
-    //   public Transform pTrans;
-    //// Use this for initialization
-    //void Start ()
-    //   {
-    //       player = GameObject.Find("Player");
-    //       pTrans = player.GetComponent<Transform>();
-    //}
-
-    //// Update is called once per frame
-    //void Update ()
-    //   {
-    //       if (waveOut == true)
-    //       {
-    //           print("2");
+    public float delay = 0;
     public Vector3 trans; 
-    //           Vector3 transP = pTrans.localPosition;
-    //           trans.z = trans.z+0.001f;
-    //           transform.position = transP - trans;
-    //       }
-
-    //       if (waveIn == true)
-    //       { }	
-    //}
+   
 
     public float m_speed;
 
@@ -37,11 +16,11 @@ public class SonarWave : MonoBehaviour {
     {
         trans = transform.localPosition;
        
-        if (Input.GetKey("e"))
+        if (Input.GetKeyDown("e") && delay <= 0)
         {
             loop = true;
             waveOut = true;
-            print(trans.z);
+            delay = 1f;
            
         }
 
@@ -64,17 +43,18 @@ public class SonarWave : MonoBehaviour {
                 {
                     transform.Translate(new Vector3(0, 0, m_speed * Time.deltaTime));
                 }
-
-                if (trans.z >= -0.5)
+                if(delay>0)
+                {
+                    delay -= Time.deltaTime;
+                }
+                else if (trans.z >= -0.5)
                 {
                    loop = false;
+                   
                 }
+                
                
             }
         }
     }
-    void Scan()
-        {
-          
-     }
 }
