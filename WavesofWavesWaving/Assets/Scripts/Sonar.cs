@@ -6,9 +6,13 @@ public class Sonar : MonoBehaviour {
     public float radius;
     public SphereCollider myCollider;
     public bool sonar = false;
-	// Use this for initialization
-	void Start () {
+    public GameObject sonarWave;
+     
+    // Use this for initialization
+    void Start () {
        myCollider = transform.GetComponent<SphereCollider>();
+        sonarWave = GameObject.Find("SonarWave");
+
     }
 
     // Update is called once per frame
@@ -23,6 +27,7 @@ public class Sonar : MonoBehaviour {
         if (sonar == true)
         {
             print("a");
+           
             myCollider.radius = myCollider.radius + 0.2f;
             if (myCollider.radius > 10f)
             {
