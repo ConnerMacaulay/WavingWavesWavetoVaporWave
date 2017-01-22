@@ -5,6 +5,7 @@ public class SonarWave : MonoBehaviour {
 
     //   public GameObject player;
        public bool waveOut = false;
+    public bool loop = false;
     //   public bool waveIn = true;
     //   public Transform pTrans;
     //// Use this for initialization
@@ -36,15 +37,16 @@ public class SonarWave : MonoBehaviour {
     {
         trans = transform.localPosition;
        
-        if (Input.GetKeyUp("e"))
+        if (Input.GetKey("e"))
         {
-            Scan();
-        }
-        
-    }
-    void Scan()
-        {
+            loop = true;
+            waveOut = true;
             print(trans.z);
+           
+        }
+
+        if (loop == true)
+        {
             if (waveOut == true)
             {
                 if (trans.z >= -15)
@@ -56,7 +58,7 @@ public class SonarWave : MonoBehaviour {
                     waveOut = false;
                 }
             }
-             if (waveOut == false)
+            else if (waveOut == false)
             {
                 if (trans.z <= -0.5)
                 {
@@ -65,8 +67,14 @@ public class SonarWave : MonoBehaviour {
 
                 if (trans.z >= -0.5)
                 {
-                    waveOut = true;
+                   loop = false;
                 }
+               
             }
+        }
+    }
+    void Scan()
+        {
+          
      }
 }
